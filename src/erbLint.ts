@@ -3,7 +3,11 @@ import { TaskQueue, Task } from "./taskQueue";
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { getConfig, ERBLintConfig } from "./configuration";
-import { getCurrentPath, isFileUri, getCommandArguments } from "./utils";
+import { getCurrentPath, getCommandArguments } from "./utils";
+
+function isFileUri(uri: vscode.Uri): boolean {
+  return uri.scheme === "file";
+}
 
 export class ERBLint {
   public config: ERBLintConfig;
@@ -22,7 +26,7 @@ export class ERBLint {
 
   public execute(document: vscode.TextDocument, onComplete?: () => void): void {
     if (
-      document.languageId !== "erb" ||
+      document.languageId !== "html.erb" ||
       document.isUntitled ||
       !isFileUri(document.uri)
     )
@@ -30,7 +34,7 @@ export class ERBLint {
 
     const fileName = document.fileName;
     const uri = document.uri;
-    let currentPath = getCurrentPath(fileName);
+    const currentPath = getCurrentPath(fileName);
 
     let onDidExec = (
       error: cp.ExecException | null,
@@ -66,7 +70,7 @@ export class ERBLint {
       this.diag.set(entries);
     };
 
-    const args = getCommandArguments(fileName).concat(this.additionalArguments)
+    const args = getCommandArguments(fileName).concat(this.additionalArguments).concat([fileName])
 
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(
@@ -108,7 +112,7 @@ export class ERBLint {
   ): cp.ChildProcess {
     let child: cp.ChildProcess;
 
-    if (this.config.useBundler) {
+    if (this.config.executePath.length === 0) {
       child = cp.exec(`${this.config.command} ${args.join(" ")}`, options, cb);
     } else {
       child = cp.execFile(this.config.command, args, options, cb);

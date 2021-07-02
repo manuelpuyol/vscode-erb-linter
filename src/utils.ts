@@ -3,10 +3,6 @@ import * as path from "path";
 import * as fs from "fs";
 import { getConfig } from "./configuration";
 
-export function isFileUri(uri: vscode.Uri): boolean {
-  return uri.scheme === "file";
-}
-
 export function getCurrentPath(fileName: string): string {
   return vscode.workspace.rootPath || path.dirname(fileName);
 }

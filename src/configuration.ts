@@ -8,8 +8,8 @@ export interface ERBLintConfig {
   command: string;
   onSave: boolean;
   configFilePath: string;
-  useBundler: boolean;
   suppressERBLintWarnings: boolean;
+  executePath: string;
 }
 
 const detectBundledERBLint: () => boolean = () => {
@@ -46,7 +46,6 @@ const autodetectExecutePath: (cmd: string) => string = (cmd) => {
 export const getConfig: () => ERBLintConfig = () => {
   const cmd = "erblint";
   const conf = vs.workspace.getConfiguration("erb.erb-lint");
-  let useBundler = conf.get("useBundler", false);
   let configPath = conf.get("executePath", "");
   let suppressERBLintWarnings = conf.get("suppressERBLintWarnings", false);
   let command;
@@ -54,25 +53,16 @@ export const getConfig: () => ERBLintConfig = () => {
   // if executePath is present in workspace config, use it.
   if (configPath.length !== 0) {
     command = configPath + cmd;
-  } else if (useBundler || detectBundledERBLint()) {
-    useBundler = true;
-    command = `bundle exec ${cmd}`;
   } else {
-    const detectedPath = autodetectExecutePath(cmd);
-    if (0 === detectedPath.length) {
-      vs.window.showWarningMessage(
-        "execute path is empty! please check erb.erb-lint.executePath"
-      );
-    }
-    command = detectedPath + cmd;
+    command = `bundle exec ${cmd}`;
   }
 
   return {
     command,
     configFilePath: conf.get("configFilePath", ""),
     onSave: conf.get("onSave", true),
-    useBundler,
     suppressERBLintWarnings,
+    executePath: configPath,
   };
 };
 

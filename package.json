@@ -12,7 +12,7 @@
   ],
   "activationEvents": [
     "onLanguage:erb",
-    "onCommand:erb.erb-lintlint"
+    "onCommand:erb.erb-lint"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -26,7 +26,7 @@
     ],
     "commands": [
       {
-        "command": "erb.erb-lintlint",
+        "command": "erb.erb-lint",
         "title": "ERB: lint with erb-lint"
       }
     ],
@@ -55,11 +55,6 @@
           "type": "boolean",
           "default": true,
           "description": "execute erb-lint on save."
-        },
-        "erb.erb-lint.useBundler": {
-          "type": "boolean",
-          "default": false,
-          "description": "execute erb-lint using bundler (ie 'bundle exec erb-lint')"
         },
         "erb.erb-lint.suppressERBLintWarnings": {
           "type": "boolean",
