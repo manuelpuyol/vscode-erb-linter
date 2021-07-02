@@ -14,7 +14,7 @@ export interface ERBLintConfig {
 
 const detectBundledERBLint: () => boolean = () => {
   try {
-    cp.execSync('bundle show rubocop', { cwd: vs.workspace.rootPath });
+    cp.execSync('bundle show erb-lint', { cwd: vs.workspace.rootPath });
     return true;
   } catch (e) {
     return false;
@@ -45,7 +45,7 @@ const autodetectExecutePath: (cmd: string) => string = (cmd) => {
  */
 export const getConfig: () => ERBLintConfig = () => {
   const win32 = process.platform === 'win32';
-  const cmd = win32 ? 'rubocop.bat' : 'rubocop';
+  const cmd = 'erb-lint';
   const conf = vs.workspace.getConfiguration('erb.erb-lint');
   let useBundler = conf.get('useBundler', false);
   let configPath = conf.get('executePath', '');
@@ -77,8 +77,8 @@ export const getConfig: () => ERBLintConfig = () => {
   };
 };
 
-export const onDidChangeConfiguration: (rubocop: ERBLint) => () => void = (
-  rubocop
+export const onDidChangeConfiguration: (erbLint: ERBLint) => () => void = (
+  erbLint
 ) => {
-  return () => (rubocop.config = getConfig());
+  return () => (erbLint.config = getConfig());
 };
