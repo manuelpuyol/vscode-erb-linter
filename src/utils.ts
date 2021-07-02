@@ -13,8 +13,9 @@ export function getCurrentPath(fileName: string): string {
 
 // extract argument to an array
 export function getCommandArguments(fileName: string): string[] {
-  let commandArguments = ["--stdin", fileName, "--force-exclusion"];
+  let commandArguments = ["--format", "json"];
   const extensionConfig = getConfig();
+
   if (extensionConfig.configFilePath !== "") {
     let found = [extensionConfig.configFilePath]
       .concat(
@@ -35,6 +36,7 @@ export function getCommandArguments(fileName: string): string[] {
         );
       }
       const config = ["--config", found[0]];
+
       commandArguments = commandArguments.concat(config);
     }
   }
