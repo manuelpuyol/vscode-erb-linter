@@ -71,7 +71,6 @@ export class ERBLint {
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(
         args,
-        document.getText(),
         { cwd: currentPath },
         (error, stdout, stderr) => {
           if (token.isCanceled) {
@@ -104,7 +103,6 @@ export class ERBLint {
   // execute erbLint
   private executeERBLint(
     args: string[],
-    fileContents: string,
     options: cp.ExecOptions,
     cb: (err: cp.ExecException | null, stdout: string, stderr: string) => void
   ): cp.ChildProcess {
@@ -115,13 +113,6 @@ export class ERBLint {
     } else {
       child = cp.execFile(this.config.command, args, options, cb);
     }
-
-    if (!child.stdin) {
-      throw new Error("ERBLint: ChildProcess.stdin is undefined!");
-    }
-
-    child.stdin.write(fileContents);
-    child.stdin.end();
 
     return child;
   }
