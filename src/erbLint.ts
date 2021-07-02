@@ -56,9 +56,9 @@ export class ERBLint {
           const loc = offence.location;
           const range = new vscode.Range(
             loc.start_line - 1,
-            loc.start_column - 1,
+            loc.start_column,
             loc.last_line - 1,
-            loc.last_column - 1,
+            loc.last_column,
           );
           const message = `${offence.message} (${offence.linter})`;
           const diagnostic = new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error);

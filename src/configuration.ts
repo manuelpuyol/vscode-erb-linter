@@ -47,7 +47,7 @@ export const getConfig: () => ERBLintConfig = () => {
   const cmd = "erblint";
   const conf = vs.workspace.getConfiguration("erb.erb-lint");
   let configPath = conf.get("executePath", "");
-  let suppressERBLintWarnings = conf.get("suppressERBLintWarnings", false);
+  let suppressERBLintWarnings = conf.get("suppressERBLintWarnings", true);
   let command;
 
   // if executePath is present in workspace config, use it.
