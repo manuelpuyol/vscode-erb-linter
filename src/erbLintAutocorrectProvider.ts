@@ -13,7 +13,7 @@ export class ERBLintAutocorrectProvider
     try {
       const args = [
         ...getCommandArguments(document.fileName),
-        "--auto-correct",
+        "-a",
       ];
       const options = {
         cwd: getCurrentPath(document.fileName),

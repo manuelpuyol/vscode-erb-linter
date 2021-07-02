@@ -51,14 +51,13 @@ export class ERBLint {
         file.offenses.forEach((offence: ERBLintOffense) => {
           const loc = offence.location;
           const range = new vscode.Range(
-            loc.line - 1,
-            loc.column - 1,
-            loc.line - 1,
-            loc.length + loc.column - 1
+            loc.start_line - 1,
+            loc.start_column - 1,
+            loc.last_line - 1,
+            loc.last_column - 1,
           );
-          const sev = this.severity(offence.severity);
-          const message = `${offence.message} (${offence.severity}:${offence.cop_name})`;
-          const diagnostic = new vscode.Diagnostic(range, message, sev);
+          const message = `${offence.message} (${offence.linter})`;
+          const diagnostic = new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error);
           diagnostics.push(diagnostic);
         });
         entries.push([uri, diagnostics]);
@@ -67,10 +66,7 @@ export class ERBLint {
       this.diag.set(entries);
     };
 
-    const jsonOutputFormat = ["--format", "json"];
-    const args = getCommandArguments(fileName)
-      .concat(this.additionalArguments)
-      .concat(jsonOutputFormat);
+    const args = getCommandArguments(fileName).concat(this.additionalArguments)
 
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(
@@ -174,22 +170,5 @@ export class ERBLint {
     }
 
     return false;
-  }
-
-  private severity(sev: string): vscode.DiagnosticSeverity {
-    switch (sev) {
-      case "refactor":
-        return vscode.DiagnosticSeverity.Hint;
-      case "convention":
-        return vscode.DiagnosticSeverity.Information;
-      case "warning":
-        return vscode.DiagnosticSeverity.Warning;
-      case "error":
-        return vscode.DiagnosticSeverity.Error;
-      case "fatal":
-        return vscode.DiagnosticSeverity.Error;
-      default:
-        return vscode.DiagnosticSeverity.Error;
-    }
   }
 }
