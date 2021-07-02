@@ -1,17 +1,17 @@
-import * as vscode from 'vscode';
-import { ERBLint } from './erbLint';
-import { ERBLintAutocorrectProvider} from './erbLintAutocorrectProvider';
-import { onDidChangeConfiguration } from './configuration';
+import * as vscode from "vscode";
+import { ERBLint } from "./erbLint";
+import { ERBLintAutocorrectProvider } from "./erbLintAutocorrectProvider";
+import { onDidChangeConfiguration } from "./configuration";
 
 // entry point of extension
 export function activate(context: vscode.ExtensionContext): void {
-  'use strict';
+  "use strict";
 
-  const diag = vscode.languages.createDiagnosticCollection('erb');
+  const diag = vscode.languages.createDiagnosticCollection("erb");
   context.subscriptions.push(diag);
 
   const erbLint = new ERBLint(diag);
-  const disposable = vscode.commands.registerCommand('erb.erb-lint', () => {
+  const disposable = vscode.commands.registerCommand("erb.erb-lint", () => {
     const document = vscode.window.activeTextEditor?.document;
     document && erbLint.execute(document);
   });
@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const formattingProvider = new ERBLintAutocorrectProvider();
 
   vscode.languages.registerDocumentFormattingEditProvider(
-    'erb',
+    "erb",
     formattingProvider
   );
 }

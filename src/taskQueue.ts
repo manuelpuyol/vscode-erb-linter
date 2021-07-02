@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export interface TaskToken {
   readonly isCanceled: boolean;
@@ -83,7 +83,7 @@ export class TaskQueue {
 
   public enqueue(task: Task): void {
     if (task.isEnqueued) {
-      throw new Error('Task is already enqueued. (uri: ' + task.uri + ')');
+      throw new Error("Task is already enqueued. (uri: " + task.uri + ")");
     }
     this.cancel(task.uri);
     task.isEnqueued = true;
@@ -114,7 +114,7 @@ export class TaskQueue {
       try {
         await task.run();
       } catch (e) {
-        console.error('Error while running erb-lint: ', e.message, e.stack);
+        console.error("Error while running erb-lint: ", e.message, e.stack);
       }
       this.tasks.shift();
     }

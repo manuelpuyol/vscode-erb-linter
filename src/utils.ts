@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs';
-import { getConfig } from './configuration';
+import * as vscode from "vscode";
+import * as path from "path";
+import * as fs from "fs";
+import { getConfig } from "./configuration";
 
 export function isFileUri(uri: vscode.Uri): boolean {
-  return uri.scheme === 'file';
+  return uri.scheme === "file";
 }
 
 export function getCurrentPath(fileName: string): string {
@@ -13,13 +13,9 @@ export function getCurrentPath(fileName: string): string {
 
 // extract argument to an array
 export function getCommandArguments(fileName: string): string[] {
-  let commandArguments = [
-    '--stdin',
-    fileName,
-    '--force-exclusion',
-  ];
+  let commandArguments = ["--stdin", fileName, "--force-exclusion"];
   const extensionConfig = getConfig();
-  if (extensionConfig.configFilePath !== '') {
+  if (extensionConfig.configFilePath !== "") {
     let found = [extensionConfig.configFilePath]
       .concat(
         (vscode.workspace.workspaceFolders || []).map((ws: any) =>
@@ -38,7 +34,7 @@ export function getCommandArguments(fileName: string): string[] {
           `Found multiple files (${found}) will use ${found[0]}`
         );
       }
-      const config = ['--config', found[0]];
+      const config = ["--config", found[0]];
       commandArguments = commandArguments.concat(config);
     }
   }

@@ -1,9 +1,9 @@
-import { ERBLintOutput, ERBLintFile, ERBLintOffense } from './erbLintOutput';
-import { TaskQueue, Task } from './taskQueue';
-import * as cp from 'child_process';
-import * as vscode from 'vscode';
-import { getConfig, ERBLintConfig } from './configuration';
-import { getCurrentPath, isFileUri, getCommandArguments } from './utils'
+import { ERBLintOutput, ERBLintFile, ERBLintOffense } from "./erbLintOutput";
+import { TaskQueue, Task } from "./taskQueue";
+import * as cp from "child_process";
+import * as vscode from "vscode";
+import { getConfig, ERBLintConfig } from "./configuration";
+import { getCurrentPath, isFileUri, getCommandArguments } from "./utils";
 
 export class ERBLint {
   public config: ERBLintConfig;
@@ -21,14 +21,22 @@ export class ERBLint {
   }
 
   public execute(document: vscode.TextDocument, onComplete?: () => void): void {
-    if (document.languageId !== 'erb' || document.isUntitled || !isFileUri(document.uri))
+    if (
+      document.languageId !== "erb" ||
+      document.isUntitled ||
+      !isFileUri(document.uri)
+    )
       return;
 
     const fileName = document.fileName;
     const uri = document.uri;
     let currentPath = getCurrentPath(fileName);
 
-    let onDidExec = (error: cp.ExecException | null, stdout: string, stderr: string) => {
+    let onDidExec = (
+      error: cp.ExecException | null,
+      stdout: string,
+      stderr: string
+    ) => {
       this.reportError(error, stderr);
       let erbLint = this.parse(stdout);
       if (erbLint === undefined || erbLint === null) {
@@ -59,8 +67,10 @@ export class ERBLint {
       this.diag.set(entries);
     };
 
-    const jsonOutputFormat = ['--format', 'json']
-    const args = getCommandArguments(fileName).concat(this.additionalArguments).concat(jsonOutputFormat);
+    const jsonOutputFormat = ["--format", "json"];
+    const args = getCommandArguments(fileName)
+      .concat(this.additionalArguments)
+      .concat(jsonOutputFormat);
 
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(
@@ -105,13 +115,13 @@ export class ERBLint {
     let child: cp.ChildProcess;
 
     if (this.config.useBundler) {
-      child = cp.exec(`${this.config.command} ${args.join(' ')}`, options, cb);
+      child = cp.exec(`${this.config.command} ${args.join(" ")}`, options, cb);
     } else {
       child = cp.execFile(this.config.command, args, options, cb);
     }
 
     if (!child.stdin) {
-      throw new Error('ERBLint: ChildProcess.stdin is undefined!');
+      throw new Error("ERBLint: ChildProcess.stdin is undefined!");
     }
 
     child.stdin.write(fileContents);
@@ -136,7 +146,7 @@ export class ERBLint {
     } catch (e) {
       if (e instanceof SyntaxError) {
         let regex = /[\r\n \t]/g;
-        let message = output.replace(regex, ' ');
+        let message = output.replace(regex, " ");
         let errorMessage = `Error on parsing output (It might non-JSON output) : "${message}"`;
         vscode.window.showWarningMessage(errorMessage);
 
@@ -150,7 +160,7 @@ export class ERBLint {
   // checking erbLint output has error
   private reportError(error: cp.ExecException | null, stderr: string): boolean {
     let errorOutput = stderr.toString();
-    if (error && (<any>error).code === 'ENOENT') {
+    if (error && (<any>error).code === "ENOENT") {
       vscode.window.showWarningMessage(
         `${this.config.command} is not executable`
       );
@@ -168,15 +178,15 @@ export class ERBLint {
 
   private severity(sev: string): vscode.DiagnosticSeverity {
     switch (sev) {
-      case 'refactor':
+      case "refactor":
         return vscode.DiagnosticSeverity.Hint;
-      case 'convention':
+      case "convention":
         return vscode.DiagnosticSeverity.Information;
-      case 'warning':
+      case "warning":
         return vscode.DiagnosticSeverity.Warning;
-      case 'error':
+      case "error":
         return vscode.DiagnosticSeverity.Error;
-      case 'fatal':
+      case "fatal":
         return vscode.DiagnosticSeverity.Error;
       default:
         return vscode.DiagnosticSeverity.Error;

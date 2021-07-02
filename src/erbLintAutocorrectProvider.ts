@@ -1,10 +1,11 @@
-import * as cp from 'child_process';
-import * as vscode from 'vscode';
-import { getConfig } from './configuration';
-import { getCurrentPath, getCommandArguments } from './utils'
+import * as cp from "child_process";
+import * as vscode from "vscode";
+import { getConfig } from "./configuration";
+import { getCurrentPath, getCommandArguments } from "./utils";
 
 export class ERBLintAutocorrectProvider
-  implements vscode.DocumentFormattingEditProvider {
+  implements vscode.DocumentFormattingEditProvider
+{
   public provideDocumentFormattingEdits(
     document: vscode.TextDocument
   ): vscode.TextEdit[] {
@@ -12,7 +13,7 @@ export class ERBLintAutocorrectProvider
     try {
       const args = [
         ...getCommandArguments(document.fileName),
-        '--auto-correct',
+        "--auto-correct",
       ];
       const options = {
         cwd: getCurrentPath(document.fileName),
@@ -20,7 +21,7 @@ export class ERBLintAutocorrectProvider
       };
       let stdout;
       if (config.useBundler) {
-        stdout = cp.execSync(`${config.command} ${args.join(' ')}`, options);
+        stdout = cp.execSync(`${config.command} ${args.join(" ")}`, options);
       } else {
         stdout = cp.execFileSync(config.command, args, options);
       }
@@ -30,7 +31,7 @@ export class ERBLintAutocorrectProvider
       // if there are still some offences not fixed RuboCop will return status 1
       if (e.status !== 1) {
         vscode.window.showWarningMessage(
-          'An error occurred during auto-correction'
+          "An error occurred during auto-correction"
         );
         console.log(e);
         return [];
@@ -58,12 +59,9 @@ export class ERBLintAutocorrectProvider
 
     const autoCorrected = autoCorrection.pop();
 
-    if (!autoCorrected)
-      throw new Error('Error autocorrecting');
+    if (!autoCorrected) throw new Error("Error autocorrecting");
 
-    return [
-      new vscode.TextEdit(this.getFullRange(document), autoCorrected),
-    ];
+    return [new vscode.TextEdit(this.getFullRange(document), autoCorrected)];
   }
 
   private getFullRange(document: vscode.TextDocument): vscode.Range {

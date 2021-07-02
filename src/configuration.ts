@@ -1,8 +1,8 @@
-import * as vs from 'vscode';
-import * as fs from 'fs';
-import * as cp from 'child_process';
-import * as path from 'path';
-import { ERBLint } from './erbLint';
+import * as vs from "vscode";
+import * as fs from "fs";
+import * as cp from "child_process";
+import * as path from "path";
+import { ERBLint } from "./erbLint";
 
 export interface ERBLintConfig {
   command: string;
@@ -14,7 +14,7 @@ export interface ERBLintConfig {
 
 const detectBundledERBLint: () => boolean = () => {
   try {
-    cp.execSync('bundle show erb-lint', { cwd: vs.workspace.rootPath });
+    cp.execSync("bundle show erb-lint", { cwd: vs.workspace.rootPath });
     return true;
   } catch (e) {
     return false;
@@ -22,10 +22,10 @@ const detectBundledERBLint: () => boolean = () => {
 };
 
 const autodetectExecutePath: (cmd: string) => string = (cmd) => {
-  const key: string = 'PATH';
+  const key: string = "PATH";
   let paths = process.env[key];
   if (!paths) {
-    return '';
+    return "";
   }
 
   let pathparts = paths.split(path.delimiter);
@@ -36,7 +36,7 @@ const autodetectExecutePath: (cmd: string) => string = (cmd) => {
     }
   }
 
-  return '';
+  return "";
 };
 
 /**
@@ -44,12 +44,12 @@ const autodetectExecutePath: (cmd: string) => string = (cmd) => {
  * @return {ERBLintConfig} config object
  */
 export const getConfig: () => ERBLintConfig = () => {
-  const win32 = process.platform === 'win32';
-  const cmd = 'erb-lint';
-  const conf = vs.workspace.getConfiguration('erb.erb-lint');
-  let useBundler = conf.get('useBundler', false);
-  let configPath = conf.get('executePath', '');
-  let suppressERBLintWarnings = conf.get('suppressERBLintWarnings', false);
+  const win32 = process.platform === "win32";
+  const cmd = "erb-lint";
+  const conf = vs.workspace.getConfiguration("erb.erb-lint");
+  let useBundler = conf.get("useBundler", false);
+  let configPath = conf.get("executePath", "");
+  let suppressERBLintWarnings = conf.get("suppressERBLintWarnings", false);
   let command;
 
   // if executePath is present in workspace config, use it.
@@ -62,7 +62,7 @@ export const getConfig: () => ERBLintConfig = () => {
     const detectedPath = autodetectExecutePath(cmd);
     if (0 === detectedPath.length) {
       vs.window.showWarningMessage(
-        'execute path is empty! please check erb.erb-lint.executePath'
+        "execute path is empty! please check erb.erb-lint.executePath"
       );
     }
     command = detectedPath + cmd;
@@ -70,8 +70,8 @@ export const getConfig: () => ERBLintConfig = () => {
 
   return {
     command,
-    configFilePath: conf.get('configFilePath', ''),
-    onSave: conf.get('onSave', true),
+    configFilePath: conf.get("configFilePath", ""),
+    onSave: conf.get("onSave", true),
     useBundler,
     suppressERBLintWarnings,
   };
