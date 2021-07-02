@@ -8,7 +8,7 @@ export function getCurrentPath(fileName: string): string {
 }
 
 // extract argument to an array
-export function getCommandArguments(fileName: string): string[] {
+export function getCommandArguments(fileName: string, autocorrect: boolean = false): string[] {
   let commandArguments = ["--format", "json"];
   const extensionConfig = getConfig();
 
@@ -33,9 +33,16 @@ export function getCommandArguments(fileName: string): string[] {
       }
       const config = ["--config", found[0]];
 
-      commandArguments = commandArguments.concat(config);
+      commandArguments = [...commandArguments, ...config];
     }
   }
 
+  if (autocorrect) commandArguments = [...commandArguments, "-a"];
+
+
   return commandArguments;
+}
+
+export function isFileUri(uri: vscode.Uri): boolean {
+  return uri.scheme === "file";
 }

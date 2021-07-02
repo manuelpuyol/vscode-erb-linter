@@ -27,14 +27,11 @@
     "commands": [
       {
         "command": "erb.erb-lint",
-        "title": "ERB: lint with erb-lint"
-      }
-    ],
-    "keybindings": [
+        "title": "ERB Linter: lint with erb-lint"
+      },
       {
-        "key": "shift+ctrl+r",
-        "command": "editor.action.formatDocument",
-        "when": "editorLangId == 'erb'"
+        "command": "erb.erb-lint.correct",
+        "title": "ERB Linter: autocorrect current file with erb-lint"
       }
     ],
     "configuration": {
@@ -58,7 +55,7 @@
         },
         "erb.erb-lint.suppressERBLintWarnings": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Suppress warnings from erb-lint and attempt to run regardless. (Useful if you share a erb-lint.yml file and run into unrecognized cop errors you know are okay.)"
         }
       }

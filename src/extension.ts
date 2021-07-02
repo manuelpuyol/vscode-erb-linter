@@ -10,12 +10,18 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(diag);
 
   const erbLint = new ERBLint(diag);
-  const disposable = vscode.commands.registerCommand("erb.erb-lint", () => {
+  const disposableLint = vscode.commands.registerCommand("erb.erb-lint", () => {
     const document = vscode.window.activeTextEditor?.document;
     document && erbLint.execute(document);
   });
 
-  context.subscriptions.push(disposable);
+  const disposableCorrect = vscode.commands.registerCommand("erb.erb-lint.correct", () => {
+    const document = vscode.window.activeTextEditor?.document;
+    document && erbLint.correct(document);
+  });
+
+  context.subscriptions.push(disposableLint);
+  context.subscriptions.push(disposableCorrect);
 
   const ws = vscode.workspace;
 

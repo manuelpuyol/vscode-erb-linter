@@ -3,11 +3,7 @@ import { TaskQueue, Task } from "./taskQueue";
 import * as cp from "child_process";
 import * as vscode from "vscode";
 import { getConfig, ERBLintConfig } from "./configuration";
-import { getCurrentPath, getCommandArguments } from "./utils";
-
-function isFileUri(uri: vscode.Uri): boolean {
-  return uri.scheme === "file";
-}
+import { getCurrentPath, getCommandArguments, isFileUri } from "./utils";
 
 export class ERBLint {
   public config: ERBLintConfig;
@@ -25,23 +21,13 @@ export class ERBLint {
   }
 
   public execute(document: vscode.TextDocument, onComplete?: () => void): void {
-    if (
-      document.languageId !== "html.erb" ||
-      document.isUntitled ||
-      !isFileUri(document.uri)
-    )
-      return;
+    if (!this.shouldRun(document)) return;
 
-    const fileName = document.fileName;
     const uri = document.uri;
-    const currentPath = getCurrentPath(fileName);
 
     let onDidExec = (
-      error: cp.ExecException | null,
       stdout: string,
-      stderr: string
     ) => {
-      this.reportError(error, stderr);
       let erbLint = this.parse(stdout);
       if (erbLint === undefined || erbLint === null) {
         return;
@@ -70,26 +56,15 @@ export class ERBLint {
       this.diag.set(entries);
     };
 
-    const args = getCommandArguments(fileName).concat(this.additionalArguments).concat([fileName])
+    this.scheduleERBTask(document, false, onComplete, onDidExec)
+  }
 
-    let task = new Task(uri, (token) => {
-      let process = this.executeERBLint(
-        args,
-        { cwd: currentPath },
-        (error, stdout, stderr) => {
-          if (token.isCanceled) {
-            return;
-          }
-          onDidExec(error, stdout, stderr);
-          token.finished();
-          if (onComplete) {
-            onComplete();
-          }
-        }
-      );
-      return () => process.kill();
+  public correct(document: vscode.TextDocument): void {
+    if (!this.shouldRun(document)) return;
+
+    this.scheduleERBTask(document, true, () => {
+      this.execute(document);
     });
-    this.taskQueue.enqueue(task);
   }
 
   public get isOnSave(): boolean {
@@ -102,6 +77,44 @@ export class ERBLint {
       this.taskQueue.cancel(uri);
       this.diag.delete(uri);
     }
+  }
+
+  private shouldRun(document: vscode.TextDocument) {
+    return document.languageId === "html.erb" &&
+      !document.isUntitled &&
+      isFileUri(document.uri)
+  }
+
+  private scheduleERBTask(
+    document: vscode.TextDocument,
+    autocorrect: boolean,
+    onComplete?: () => void,
+    onDidExec?: (
+      stdout: string,
+    ) => void,
+  ) {
+    const fileName = document.fileName;
+    const uri = document.uri;
+    const currentPath = getCurrentPath(fileName);
+
+    const args = getCommandArguments(fileName, autocorrect).concat(this.additionalArguments).concat([fileName])
+
+    let task = new Task(uri, (token) => {
+      let process = this.executeERBLint(
+        args,
+        { cwd: currentPath },
+        (error, stdout, stderr) => {
+          if (token.isCanceled) return;
+
+          this.reportError(error, stderr);
+          onDidExec && onDidExec(stdout);
+          token.finished();
+          onComplete && onComplete();
+        }
+      );
+      return () => process.kill();
+    });
+    this.taskQueue.enqueue(task);
   }
 
   // execute erbLint
