@@ -28,10 +28,6 @@
       {
         "command": "erb.erb-lintlint",
         "title": "ERB: lint with erb-lint"
-      },
-      {
-        "command": "editor.action.formatDocument",
-        "title": "ERB: autocorrect with erb-lint"
       }
     ],
     "keybindings": [

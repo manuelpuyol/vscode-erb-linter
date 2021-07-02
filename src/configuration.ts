@@ -44,7 +44,6 @@ const autodetectExecutePath: (cmd: string) => string = (cmd) => {
  * @return {ERBLintConfig} config object
  */
 export const getConfig: () => ERBLintConfig = () => {
-  const win32 = process.platform === "win32";
   const cmd = "erblint";
   const conf = vs.workspace.getConfiguration("erb.erb-lint");
   let useBundler = conf.get("useBundler", false);
