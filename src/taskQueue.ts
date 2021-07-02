@@ -29,7 +29,7 @@ export class Task {
     this.body = body;
   }
 
-  public run(): Promise<void> {
+  public run(): Promise<void> | undefined {
     if (this.isCanceled) {
       return;
     }
@@ -70,7 +70,7 @@ export class Task {
 
 /**
  * Provides single-threaded task queue which runs single asynchronous
- * Task at a time. This restricts concurrent execution of rubocop
+ * Task at a time. This restricts concurrent execution of erb-lint
  * processes to prevent from running out machine resource.
  */
 export class TaskQueue {
@@ -114,7 +114,7 @@ export class TaskQueue {
       try {
         await task.run();
       } catch (e) {
-        console.error('Error while running rubocop: ', e.message, e.stack);
+        console.error('Error while running erb-lint: ', e.message, e.stack);
       }
       this.tasks.shift();
     }
