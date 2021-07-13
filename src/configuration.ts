@@ -1,7 +1,4 @@
 import * as vs from "vscode";
-import * as fs from "fs";
-import * as cp from "child_process";
-import * as path from "path";
 import { ERBLint } from "./erbLint";
 
 export interface ERBLintConfig {
@@ -11,33 +8,6 @@ export interface ERBLintConfig {
   suppressERBLintWarnings: boolean;
   executePath: string;
 }
-
-const detectBundledERBLint: () => boolean = () => {
-  try {
-    cp.execSync("bundle show erb-lint", { cwd: vs.workspace.rootPath });
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-
-const autodetectExecutePath: (cmd: string) => string = (cmd) => {
-  const key: string = "PATH";
-  let paths = process.env[key];
-  if (!paths) {
-    return "";
-  }
-
-  let pathparts = paths.split(path.delimiter);
-  for (let i = 0; i < pathparts.length; i++) {
-    let binpath = path.join(pathparts[i], cmd);
-    if (fs.existsSync(binpath)) {
-      return pathparts[i] + path.sep;
-    }
-  }
-
-  return "";
-};
 
 /**
  * Read the workspace configuration for 'erb.erb-lint' and return a ERBLintConfig.

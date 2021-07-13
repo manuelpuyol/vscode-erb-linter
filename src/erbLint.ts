@@ -47,7 +47,7 @@ export class ERBLint {
             loc.last_column,
           );
           const message = `${offence.message} (${offence.linter})`;
-          const diagnostic = new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Error);
+          const diagnostic = new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Information);
           diagnostics.push(diagnostic);
         });
         entries.push([uri, diagnostics]);
@@ -87,7 +87,7 @@ export class ERBLint {
 
   private scheduleERBTask(
     document: vscode.TextDocument,
-    autocorrect: boolean,
+    autoCorrect: boolean,
     onComplete?: () => void,
     onDidExec?: (
       stdout: string,
@@ -97,7 +97,7 @@ export class ERBLint {
     const uri = document.uri;
     const currentPath = getCurrentPath(fileName);
 
-    const args = getCommandArguments(fileName, autocorrect).concat(this.additionalArguments).concat([fileName])
+    const args = getCommandArguments(fileName, { autoCorrect }).concat(this.additionalArguments).concat([fileName])
 
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(

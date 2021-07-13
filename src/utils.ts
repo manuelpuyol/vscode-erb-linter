@@ -8,7 +8,7 @@ export function getCurrentPath(fileName: string): string {
 }
 
 // extract argument to an array
-export function getCommandArguments(fileName: string, autocorrect: boolean = false): string[] {
+export function getCommandArguments(fileName: string, options: { autoCorrect?: boolean, stdin?: boolean }): string[] {
   let commandArguments = ["--format", "json"];
   const extensionConfig = getConfig();
 
@@ -37,8 +37,8 @@ export function getCommandArguments(fileName: string, autocorrect: boolean = fal
     }
   }
 
-  if (autocorrect) commandArguments = [...commandArguments, "-a"];
-
+  if (options.autoCorrect) commandArguments = [...commandArguments, "--autocorrect"];
+  if (options.stdin) commandArguments = [...commandArguments, "--stdin", fileName];
 
   return commandArguments;
 }

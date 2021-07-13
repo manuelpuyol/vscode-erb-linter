@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { ERBLint } from "./erbLint";
+import { ERBLintAutocorrectProvider } from "./erbLintAutocorrectProvider";
 import { onDidChangeConfiguration } from "./configuration";
 
 // entry point of extension
@@ -36,12 +37,18 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   ws.onDidSaveTextDocument((e: vscode.TextDocument) => {
-    if (erbLint.isOnSave) {
-      erbLint.execute(e);
-    }
+    // if (erbLint.isOnSave) {
+    //   erbLint.execute(e);
+    // }
   });
 
   ws.onDidCloseTextDocument((e: vscode.TextDocument) => {
     erbLint.clear(e);
   });
+
+  const formattingProvider = new ERBLintAutocorrectProvider();
+  vscode.languages.registerDocumentFormattingEditProvider(
+    'html.erb',
+    formattingProvider
+  );
 }
