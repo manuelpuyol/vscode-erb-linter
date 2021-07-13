@@ -25,7 +25,6 @@ Add `erb_lint` to your project's Gemfile and install it with Bundler.
 
 Install in globally using `gem install erb_lint`. If you want to use it globally. you must set the `executePath`.
 
-
 ## Options
 
 ### erb.erb-lint.executePath

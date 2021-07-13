@@ -16,10 +16,13 @@ export function activate(context: vscode.ExtensionContext): void {
     document && erbLint.execute(document);
   });
 
-  const disposableCorrect = vscode.commands.registerCommand("erb.erb-lint.correct", () => {
-    const document = vscode.window.activeTextEditor?.document;
-    document && erbLint.correct(document);
-  });
+  const disposableCorrect = vscode.commands.registerCommand(
+    "erb.erb-lint.correct",
+    () => {
+      const document = vscode.window.activeTextEditor?.document;
+      document && erbLint.correct(document);
+    }
+  );
 
   context.subscriptions.push(disposableLint);
   context.subscriptions.push(disposableCorrect);
@@ -48,7 +51,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const formattingProvider = new ERBLintAutocorrectProvider();
   vscode.languages.registerDocumentFormattingEditProvider(
-    'html.erb',
+    "html.erb",
     formattingProvider
   );
 }

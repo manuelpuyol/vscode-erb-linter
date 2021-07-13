@@ -25,9 +25,7 @@ export class ERBLint {
 
     const uri = document.uri;
 
-    let onDidExec = (
-      stdout: string,
-    ) => {
+    let onDidExec = (stdout: string) => {
       let erbLint = this.parse(stdout);
       if (erbLint === undefined || erbLint === null) {
         return;
@@ -44,10 +42,14 @@ export class ERBLint {
             loc.start_line - 1,
             loc.start_column,
             loc.last_line - 1,
-            loc.last_column,
+            loc.last_column
           );
           const message = `${offence.message} (${offence.linter})`;
-          const diagnostic = new vscode.Diagnostic(range, message, vscode.DiagnosticSeverity.Information);
+          const diagnostic = new vscode.Diagnostic(
+            range,
+            message,
+            vscode.DiagnosticSeverity.Information
+          );
           diagnostics.push(diagnostic);
         });
         entries.push([uri, diagnostics]);
@@ -56,7 +58,7 @@ export class ERBLint {
       this.diag.set(entries);
     };
 
-    this.scheduleERBTask(document, false, onComplete, onDidExec)
+    this.scheduleERBTask(document, false, onComplete, onDidExec);
   }
 
   public correct(document: vscode.TextDocument): void {
@@ -80,24 +82,26 @@ export class ERBLint {
   }
 
   private shouldRun(document: vscode.TextDocument) {
-    return document.languageId === "html.erb" &&
+    return (
+      document.languageId === "html.erb" &&
       !document.isUntitled &&
       isFileUri(document.uri)
+    );
   }
 
   private scheduleERBTask(
     document: vscode.TextDocument,
     autoCorrect: boolean,
     onComplete?: () => void,
-    onDidExec?: (
-      stdout: string,
-    ) => void,
+    onDidExec?: (stdout: string) => void
   ) {
     const fileName = document.fileName;
     const uri = document.uri;
     const currentPath = getCurrentPath(fileName);
 
-    const args = getCommandArguments(fileName, { autoCorrect }).concat(this.additionalArguments).concat([fileName])
+    const args = getCommandArguments(fileName, { autoCorrect })
+      .concat(this.additionalArguments)
+      .concat([fileName]);
 
     let task = new Task(uri, (token) => {
       let process = this.executeERBLint(
