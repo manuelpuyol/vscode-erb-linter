@@ -11,6 +11,7 @@ This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb
 - Lint ERB files using "ERB Linter: lint with erb-lint" in the command palette.
 - Lint on save.
 - Autocorrect using "ERB Linter: autocorrect current file with erb-lint" in the command palette.
+- Format on save (requires `--stdin` option from https://github.com/Shopify/erb-lint/pull/224)
 
 # Installation
 
@@ -47,5 +48,4 @@ Suppress warnings from erb-lint and attempt to run regardless. Useful if you hav
 # TODOs
 
 - Add tests
-- Add formatter on save instead of command in the palette
 - Improve usability with global `erb-lint`
