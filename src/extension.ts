@@ -40,9 +40,9 @@ export function activate(context: vscode.ExtensionContext): void {
   });
 
   ws.onDidSaveTextDocument((e: vscode.TextDocument) => {
-    // if (erbLint.isOnSave) {
-    //   erbLint.execute(e);
-    // }
+    if (erbLint.isOnSave) {
+      erbLint.execute(e);
+    }
   });
 
   ws.onDidCloseTextDocument((e: vscode.TextDocument) => {
