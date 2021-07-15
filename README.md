@@ -44,6 +44,10 @@ Whether or not to run `erb-lint` in the current file on save. This defaults to `
 
 Suppress warnings from erb-lint and attempt to run regardless. Useful if you have random warnings in the `erb-lint` execution. This defaults to `true`.
 
+### erb.erb-lint.pathToBundler
+
+Uses `bundle` by default, but can be modified in case you use a custom path.
+
 # TODOs
 
 - Add tests
