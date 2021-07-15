@@ -10,6 +10,13 @@
     "prettier/prettier": "error",
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-explicit-any": "error"
+    "@typescript-eslint/no-explicit-any": "error",
+    "import/no-namespace": "off",
+    "no-console": "off",
+    "eslint-comments/no-use": ["error", {
+      "allow": [
+        "eslint-disable-next-line"
+      ]
+    }]
   }
 }
