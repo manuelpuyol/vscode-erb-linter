@@ -4,7 +4,7 @@
   "displayName": "ERB Linter",
   "description": "execute erb-lint for ERB code.",
   "version": "0.0.2",
-  "repository": "https://github.com/manuelpuyol/erb-lint",
+  "repository": "https://github.com/manuelpuyol/vscode-erb-linter",
   "engines": {
     "vscode": "^1.57.0"
   },
