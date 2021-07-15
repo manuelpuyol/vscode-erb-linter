@@ -1,70 +1,49 @@
-# erb-linter README
+# ERB Linter for Visual Studio Code
 
-This is the README for your extension "erb-linter". After writing up a brief description, we recommend including the following sections.
+_This project is based on [ruby-robocop](https://github.com/misogi/vscode-ruby-rubocop)_
+
+This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb-lint) for vscode.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Lint ERB files using "ERB Linter: lint with erb-lint" in the command palette.
+- Lint on save.
+- Autocorrect using "ERB Linter: autocorrect current file with erb-lint" in the command palette.
 
-For example if there is an image subfolder under your extension project workspace:
+# Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+You can configure rules and behaviors like explained in the [erb-lint docs](https://github.com/Shopify/erb-lint).
+To install the gem, there are two methods.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Preferred
 
-## Requirements
+Add `erb_lint` to your project's Gemfile and install it with Bundler.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Global install
 
-## Extension Settings
+Install in globally using `gem install erb_lint`. If you want to use it globally. you must set the `executePath`.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Options
 
-For example:
+### erb.erb-lint.executePath
 
-This extension contributes the following settings:
+Declare an specific path to run `erb-lint`. This is untested and may have some issues loading your configuration file (see configFilePath to fix this).
+If no path is provided, the extension will default to running `erb-lint` with `bundle`.
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+### erb.erb-lint.configFilePath
 
-## Known Issues
+Path to the `erb-lint` configuration file. The extension will try to use your root `.erb-lint.yml` file.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+### erb.erb-lint.onSave
 
-## Release Notes
+Whether or not to run `erb-lint` in the current file on save. This defaults to `true`.
 
-Users appreciate release notes as you update your extension.
+### erb.erb-lint.suppressERBLintWarnings
 
-### 1.0.0
+Suppress warnings from erb-lint and attempt to run regardless. Useful if you have random warnings in the `erb-lint` execution. This defaults to `true`.
 
-Initial release of ...
+# TODOs
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Add tests
+- Add formatter on save instead of command in the palette
+- Improve usability with global `erb-lint`
