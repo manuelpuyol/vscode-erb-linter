@@ -37,8 +37,13 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "ERB Linter configuration",
+      "title": "ERB Linter",
       "properties": {
+        "erb.erb-lint.pathToBundler": {
+          "type": "string",
+          "default": "",
+          "description": "execution path of bundler."
+        },
         "erb.erb-lint.executePath": {
           "type": "string",
           "default": "",
