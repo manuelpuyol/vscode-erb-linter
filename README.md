@@ -8,9 +8,9 @@ This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb
 
 ## Features
 
-- Lint ERB files using "ERB Linter: lint with erb-lint" in the command palette.
+- Lint ERB files using `ERB Linter: lint with erb-lint` in the command palette.
 - Lint on save.
-- Autocorrect using "ERB Linter: autocorrect current file with erb-lint" in the command palette.
+- Autocorrect using `ERB Linter: autocorrect current file with erb-lint` in the command palette.
 
 # Installation
 
