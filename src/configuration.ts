@@ -19,7 +19,7 @@ export const getConfig: () => ERBLintConfig = () => {
   const conf = workspace.getConfiguration('erb.erb-lint')
   const configPath = conf.get('executePath', '')
   const suppressERBLintWarnings = conf.get('suppressERBLintWarnings', true)
-  const pathToBundler = conf.get('pathToBundler', 'bundle')
+  const pathToBundler = conf.get('pathToBundler', 'bundle') || 'bundle'
   let command
 
   // if executePath is present in workspace config, use it.
