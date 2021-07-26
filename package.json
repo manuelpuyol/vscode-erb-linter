@@ -41,7 +41,7 @@
       "properties": {
         "erb.erb-lint.pathToBundler": {
           "type": "string",
-          "default": "",
+          "default": "bundle",
           "description": "execution path of bundler."
         },
         "erb.erb-lint.executePath": {
