@@ -11,3 +11,5 @@ jobs:
         run: yarn
       - name: Run linter
         run: yarn lint
+      - name: Compile
+        run: yarn compile
