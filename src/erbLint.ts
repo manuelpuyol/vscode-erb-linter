@@ -1,6 +1,5 @@
 import * as cp from "child_process";
 import * as vscode from "vscode";
-import * as path from "path";
 import { ERBLintOutput, ERBLintFile, ERBLintOffense } from "./erbLintOutput";
 import { TaskQueue, Task } from "./taskQueue";
 import { getConfig, ERBLintConfig } from "./configuration";
@@ -27,7 +26,7 @@ export class ERBLint {
     const uri = document.uri;
 
     let onDidExec = (stdout: string) => {
-      let erbLint = this.parse(document, stdout);
+      let erbLint = this.parse(stdout);
       if (erbLint === undefined || erbLint === null) {
         return;
       }
@@ -39,10 +38,16 @@ export class ERBLint {
         let diagnostics: vscode.Diagnostic[] = [];
         file.offenses.forEach((offence: ERBLintOffense) => {
           const loc = offence.location;
-          const range = document.lineAt(loc.line - 1).range
+          const range = new vscode.Range(
+            loc.start_line - 1,
+            loc.start_column,
+            loc.last_line - 1,
+            loc.last_column
+          );
+          const message = `${offence.message} (${offence.linter})`;
           const diagnostic = new vscode.Diagnostic(
             range,
-            offence.message,
+            message,
             vscode.DiagnosticSeverity.Information
           );
           diagnostics.push(diagnostic);
@@ -134,7 +139,9 @@ export class ERBLint {
   }
 
   // parse erbLint(JSON) output
-  private parse(document: vscode.TextDocument, output: string): ERBLintOutput | null {
+  private parse(output: string): ERBLintOutput | null {
+    let erbLint: ERBLintOutput | null = null;
+
     if (output.length < 1) {
       let message = `command ${this.config.command} returns empty output! please check configuration.`;
       vscode.window.showWarningMessage(message);
@@ -142,40 +149,20 @@ export class ERBLint {
       return null;
     }
 
-    if (output.includes("No errors were found in ERB files"))
-      return null;
+    try {
+      erbLint = JSON.parse(output);
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        let regex = /[\r\n \t]/g;
+        let message = output.replace(regex, " ");
+        let errorMessage = `Error on parsing output (It might non-JSON output) : "${message}"`;
+        vscode.window.showWarningMessage(errorMessage);
 
-    const lines = output.split(/^.*\.erb:/m);
-    // first line is a progress message
-    lines.shift()
+        return null;
+      }
+    }
 
-    let offenses: Array<ERBLintOffense> = []
-
-    lines.forEach((l) => {
-      const match = l.trim().match(/(?<line>\d+):(?<column>\d+): (?<message>(.|\n)*)/m);
-      if (!match || !match.groups) return;
-
-      const {
-        line,
-        column,
-        message,
-      } = match.groups;
-
-      offenses = [...offenses, {
-        message,
-        location: {
-          line: parseInt(line),
-          column: parseInt(column),
-        }
-      }];
-    });
-
-    return {
-      files: [{
-        path: document.fileName,
-        offenses
-      }]
-    };
+    return erbLint;
   }
 
   // checking erbLint output has error
