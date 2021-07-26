@@ -75,7 +75,8 @@
     "lint": "eslint src . --ext .ts",
     "test": "node ./out/test/runTest.js",
     "tsc": "tsc",
-    "package": "vsce package -o out/"
+    "package": "vsce package -o out/",
+    "publish": "vsce publish"
   },
   "devDependencies": {
     "@github/prettier-config": "^0.0.4",
