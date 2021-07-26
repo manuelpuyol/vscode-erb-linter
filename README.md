@@ -1,15 +1,18 @@
 # ERB Linter for Visual Studio Code
 
-_This project is based on [ruby-robocop](https://github.com/misogi/vscode-ruby-rubocop)_
+_This project is based on [ruby-rubocop](https://github.com/misogi/vscode-ruby-rubocop)_
 
 This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb-lint) for vscode.
 
+![demo](./assets/demo.gif)
+
 ## Features
 
-- Lint ERB files using "ERB Linter: lint with erb-lint" in the command palette.
+- Lint ERB files using `ERB Linter: lint with erb-lint` in the command palette.
 - Lint on save.
-- Autocorrect using "ERB Linter: autocorrect current file with erb-lint" in the command palette.
+- Autocorrect using `ERB Linter: autocorrect current file with erb-lint` in the command palette.
 - Format on save
+
 
 # Installation
 
@@ -22,7 +25,7 @@ Add `erb_lint` to your project's Gemfile and install it with Bundler.
 
 ## Global install
 
-Install in globally using `gem install erb_lint`. If you want to use it globally. you must set the `executePath`.
+Install in globally using `gem install erb_lint`. If you want to use it globally, you must set the `executePath`.
 
 ## Options
 
@@ -42,6 +45,10 @@ Whether or not to run `erb-lint` in the current file on save. This defaults to `
 ### erb.erb-lint.suppressERBLintWarnings
 
 Suppress warnings from erb-lint and attempt to run regardless. Useful if you have random warnings in the `erb-lint` execution. This defaults to `true`.
+
+### erb.erb-lint.pathToBundler
+
+Uses `bundle` by default, but can be modified in case you use a custom path.
 
 # TODOs
 

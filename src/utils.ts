@@ -12,7 +12,7 @@ export function getCommandArguments(
   fileName: string,
   options: { autoCorrect?: boolean; stdin?: boolean }
 ): string[] {
-  let commandArguments = ["--format", "compact"];
+  let commandArguments = ["--format", "json"];
   const extensionConfig = getConfig();
 
   if (extensionConfig.configFilePath !== "") {
