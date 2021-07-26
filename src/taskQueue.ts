@@ -119,12 +119,28 @@ export class TaskQueue {
         this.busy = false
         return
       }
+
+      await this.runWithProgress(task)
+
+      this.tasks.shift();
+    }
+  }
+
+  private async runWithProgress(task: Task) {
+    await vscode.window.withProgress({
+      location: vscode.ProgressLocation.Window,
+      cancellable: false,
+      title: 'Linting with ERBLint'
+    }, async (progress) => {
+      progress.report({  increment: 0 });
+
       try {
         await task.run()
       } catch (e) {
         console.error('Error while running erb-lint: ', e.message, e.stack)
       }
-      this.tasks.shift()
-    }
+
+      progress.report({ increment: 100 });
+    });
   }
 }
