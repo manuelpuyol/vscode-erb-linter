@@ -2,7 +2,7 @@
 
 _This project is based on [ruby-rubocop](https://github.com/misogi/vscode-ruby-rubocop)_
 
-This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb-lint) for vscode.
+This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb-lint) for vscode. **It requires version `>= 0.1.0` to work.**
 
 ![demo](./assets/demo.gif)
 
