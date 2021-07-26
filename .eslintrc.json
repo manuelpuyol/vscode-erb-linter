@@ -1,10 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "plugin:github/internal",
-    "plugin:github/recommended",
-    "plugin:github/typescript"
-  ],
+  "extends": ["plugin:github/internal", "plugin:github/recommended", "plugin:github/typescript"],
   "plugins": ["@typescript-eslint", "github"],
   "rules": {
     "prettier/prettier": "error",
@@ -13,10 +9,11 @@
     "@typescript-eslint/no-explicit-any": "error",
     "import/no-namespace": "off",
     "no-console": "off",
-    "eslint-comments/no-use": ["error", {
-      "allow": [
-        "eslint-disable-next-line"
-      ]
-    }]
+    "eslint-comments/no-use": [
+      "error",
+      {
+        "allow": ["eslint-disable-next-line"]
+      }
+    ]
   }
 }
