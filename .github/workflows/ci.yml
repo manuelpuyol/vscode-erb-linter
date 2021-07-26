@@ -13,5 +13,3 @@ jobs:
         run: yarn lint
       - name: Compile
         run: yarn compile
-      - name: TSC
-        run: yarn tsc
