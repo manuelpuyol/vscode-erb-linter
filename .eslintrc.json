@@ -1,18 +1,19 @@
 {
-  "root": true,
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
-  },
-  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:github/internal", "plugin:github/recommended", "plugin:github/typescript"],
+  "plugins": ["@typescript-eslint", "github"],
   "rules": {
-    "@typescript-eslint/naming-convention": "warn",
-    "@typescript-eslint/semi": "warn",
-    "curly": "warn",
-    "eqeqeq": "warn",
-    "no-throw-literal": "warn",
-    "semi": "off"
-  },
-  "ignorePatterns": ["out", "dist", "**/*.d.ts"]
+    "prettier/prettier": "error",
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "import/no-namespace": "off",
+    "no-console": "off",
+    "eslint-comments/no-use": [
+      "error",
+      {
+        "allow": ["eslint-disable-next-line"]
+      }
+    ]
+  }
 }

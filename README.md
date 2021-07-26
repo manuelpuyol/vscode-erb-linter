@@ -13,7 +13,6 @@ This extensions provides interfaces to [erb-lint](https://github.com/Shopify/erb
 - Autocorrect using `ERB Linter: autocorrect current file with erb-lint` in the command palette.
 - Format on save
 
-
 # Installation
 
 You can configure rules and behaviors like explained in the [erb-lint docs](https://github.com/Shopify/erb-lint).

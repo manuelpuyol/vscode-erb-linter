@@ -1,23 +1,23 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode'
 
 export interface TaskToken {
-  readonly isCanceled: boolean;
-  finished(): void;
+  readonly isCanceled: boolean
+  finished(): void
 }
 
-export type CancelCallback = () => void;
+export type CancelCallback = () => void
 
 /**
  * Task with async operation. It will be enqueued to and managed by
  * TaskQueue. Useful for spawning ChildProcess.
  */
 export class Task {
-  public readonly uri: vscode.Uri;
-  public isEnqueued: boolean = false;
-  private body: (token: TaskToken) => CancelCallback;
-  private isCanceled: boolean = false;
-  private resolver?: () => void;
-  private onCancel?: CancelCallback;
+  public readonly uri: vscode.Uri
+  public isEnqueued = false
+  private body: (token: TaskToken) => CancelCallback
+  private isCanceled = false
+  private resolver?: () => void
+  private onCancel?: CancelCallback
 
   /**
    * @param body Function of task body, which returns callback called
@@ -25,45 +25,48 @@ export class Task {
    *             token.finished() after async operation is done.
    */
   constructor(uri: vscode.Uri, body: (token: TaskToken) => CancelCallback) {
-    this.uri = uri;
-    this.body = body;
+    this.uri = uri
+    this.body = body
   }
 
   public run(): Promise<void> | undefined {
     if (this.isCanceled) {
-      return;
+      return
     }
-    let task = this;
-    return new Promise<void>((resolve, reject) => {
-      task.resolver = () => resolve();
-      let token = {
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const task = this
+    return new Promise<void>(resolve => {
+      task.resolver = () => resolve()
+
+      const token = {
         get isCanceled(): boolean {
-          return task.isCanceled;
+          return task.isCanceled
         },
 
         finished(): void {
-          task.resolveOnce();
-        },
-      };
-      task.onCancel = this.body(token);
-    });
+          task.resolveOnce()
+        }
+      }
+
+      task.onCancel = this.body(token)
+    })
   }
 
   public cancel(): void {
     if (this.isCanceled) {
-      return;
+      return
     }
-    this.isCanceled = true;
-    if (this.onCancel) {
-      this.onCancel();
-    }
-    this.resolveOnce();
+
+    this.isCanceled = true
+    this.onCancel && this.onCancel()
+    this.resolveOnce()
   }
 
   private resolveOnce(): void {
     if (this.resolver) {
-      this.resolver();
-      this.resolver = undefined;
+      this.resolver()
+      this.resolver = undefined
     }
   }
 }
@@ -74,65 +77,73 @@ export class Task {
  * processes to prevent from running out machine resource.
  */
 export class TaskQueue {
-  private tasks: Task[] = [];
-  private busy: boolean = false;
+  private tasks: Task[] = []
+  private busy = false
 
   public get length(): number {
-    return this.tasks.length;
+    return this.tasks.length
   }
 
   public enqueue(task: Task): void {
     if (task.isEnqueued) {
-      throw new Error("Task is already enqueued. (uri: " + task.uri + ")");
+      throw new Error(`Task is already enqueued. (uri: ${task.uri})`)
     }
-    this.cancel(task.uri);
-    task.isEnqueued = true;
-    this.tasks.push(task);
-    this.kick();
+
+    this.cancel(task.uri)
+    task.isEnqueued = true
+    this.tasks.push(task)
+    this.kick()
   }
 
   public cancel(uri: vscode.Uri): void {
-    let uriString = uri.toString(true);
-    this.tasks.forEach((task) => {
+    const uriString = uri.toString(true)
+
+    for (const task of this.tasks) {
       if (task.uri.toString(true) === uriString) {
-        task.cancel();
+        task.cancel()
       }
-    });
+    }
   }
 
   private async kick(): Promise<void> {
     if (this.busy) {
-      return;
+      return
     }
-    this.busy = true;
+
+    this.busy = true
+
+    // eslint-disable-next-line no-constant-condition
     while (true) {
-      let task: Task | undefined = this.tasks[0];
+      const task: Task | undefined = this.tasks[0]
       if (!task) {
-        this.busy = false;
-        return;
+        this.busy = false
+        return
       }
 
       await this.runWithProgress(task)
 
-      this.tasks.shift();
+      this.tasks.shift()
     }
   }
 
   private async runWithProgress(task: Task) {
-    await vscode.window.withProgress({
-      location: vscode.ProgressLocation.Window,
-      cancellable: false,
-      title: 'Linting with ERBLint'
-    }, async (progress) => {
-      progress.report({  increment: 0 });
+    await vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Window,
+        cancellable: false,
+        title: 'Linting with ERBLint'
+      },
+      async progress => {
+        progress.report({increment: 0})
 
-      try {
-        await task.run();
-      } catch (e) {
-        console.error("Error while running erb-lint: ", e.message, e.stack);
+        try {
+          await task.run()
+        } catch (e) {
+          console.error('Error while running erb-lint: ', e.message, e.stack)
+        }
+
+        progress.report({increment: 100})
       }
-
-      progress.report({ increment: 100 });
-    });
+    )
   }
 }
