@@ -47,5 +47,6 @@ export function activate(context: vscode.ExtensionContext): void {
   })
 
   const formattingProvider = new ERBLintAutocorrectProvider()
+  vscode.languages.registerDocumentFormattingEditProvider('erb', formattingProvider)
   vscode.languages.registerDocumentFormattingEditProvider('html.erb', formattingProvider)
 }

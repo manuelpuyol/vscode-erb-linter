@@ -71,8 +71,12 @@ export class ERBLint {
     }
   }
 
-  private shouldRun(document: vscode.TextDocument) {
-    return document.languageId === 'html.erb' && !document.isUntitled && isFileUri(document.uri)
+  private shouldRun(document: vscode.TextDocument): boolean {
+    return this.isERB(document) && !document.isUntitled && isFileUri(document.uri)
+  }
+
+  private isERB(document: vscode.TextDocument): boolean {
+    return document.languageId === 'html.erb' || document.languageId === 'erb'
   }
 
   private scheduleERBTask(

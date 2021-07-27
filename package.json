@@ -12,6 +12,7 @@
     "Linters"
   ],
   "activationEvents": [
+    "onLanguage:erb",
     "onLanguage:html.erb",
     "onCommand:erb.erb-lint"
   ],
