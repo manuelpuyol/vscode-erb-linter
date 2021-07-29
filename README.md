@@ -26,26 +26,39 @@ Add `erb_lint` to your project's Gemfile and install it with Bundler.
 
 Install in globally using `gem install erb_lint`. If you want to use it globally, you must set the `executePath`.
 
-## Options
+# Enabling format on save
 
-### erb.erb-lint.executePath
+To enable Format on Save for ERB files, you have to update your VSCode configs with:
+
+```json
+"[erb]": {
+  "editor.defaultFormatter": "manuelpuyol.erb-linter",
+  "editor.formatOnSave": true
+},
+```
+
+_Note: If you are using the [Rails](https://marketplace.visualstudio.com/items?itemName=bung87.rails) extension, you may need to set the same configuration for `html.erb`_
+
+# Options
+
+## erb.erb-lint.executePath
 
 Declare an specific path to run `erb-lint`. This is untested and may have some issues loading your configuration file (see configFilePath to fix this).
 If no path is provided, the extension will default to running `erb-lint` with `bundle`.
 
-### erb.erb-lint.configFilePath
+## erb.erb-lint.configFilePath
 
 Path to the `erb-lint` configuration file. The extension will try to use your root `.erb-lint.yml` file.
 
-### erb.erb-lint.onSave
+## erb.erb-lint.onSave
 
 Whether or not to run `erb-lint` in the current file on save. This defaults to `true`.
 
-### erb.erb-lint.suppressERBLintWarnings
+## erb.erb-lint.suppressERBLintWarnings
 
 Suppress warnings from erb-lint and attempt to run regardless. Useful if you have random warnings in the `erb-lint` execution. This defaults to `true`.
 
-### erb.erb-lint.pathToBundler
+## erb.erb-lint.pathToBundler
 
 Uses `bundle` by default, but can be modified in case you use a custom path.
 
