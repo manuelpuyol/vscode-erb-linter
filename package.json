@@ -14,6 +14,7 @@
   "activationEvents": [
     "onLanguage:erb",
     "onLanguage:html.erb",
+    "onLanguage:js.erb",
     "onCommand:erb.erb-lint"
   ],
   "main": "./out/extension.js",
