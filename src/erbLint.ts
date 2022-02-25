@@ -4,6 +4,7 @@ import {ERBLintOutput} from './erbLintOutput'
 import {TaskQueue, Task} from './taskQueue'
 import {getConfig, ERBLintConfig} from './configuration'
 import {getCurrentPath, getCommandArguments, isFileUri} from './utils'
+import {LANGUAGES} from './extension'
 
 export class ERBLint {
   public config: ERBLintConfig
@@ -76,7 +77,7 @@ export class ERBLint {
   }
 
   private isERB(document: vscode.TextDocument): boolean {
-    return document.languageId === 'html.erb' || document.languageId === 'erb'
+    return LANGUAGES.includes(document.languageId)
   }
 
   private scheduleERBTask(
