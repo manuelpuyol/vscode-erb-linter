@@ -3,11 +3,7 @@ import {ERBLint} from './erbLint'
 import {ERBLintAutocorrectProvider} from './erbLintAutocorrectProvider'
 import {onDidChangeConfiguration} from './configuration'
 
-export const LANGUAGES = [
-  'erb',
-  'html.erb',
-  'js.erb'
-]
+export const LANGUAGES = ['erb', 'html.erb', 'js.erb']
 
 // entry point of extension
 export function activate(context: vscode.ExtensionContext): void {
