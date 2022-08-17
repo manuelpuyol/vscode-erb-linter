@@ -17,7 +17,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Install the dependencies
-        run: yarn i
+        run: yarn install
 
       - name: Publish
         run: yarn run publish --pat ${{ secrets.VSCE_PAT }}
