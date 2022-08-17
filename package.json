@@ -3,7 +3,7 @@
   "publisher": "manuelpuyol",
   "displayName": "ERB Linter",
   "description": "execute erb-lint for ERB code.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "repository": "https://github.com/manuelpuyol/vscode-erb-linter",
   "icon": "assets/logo.png",
   "engines": {
