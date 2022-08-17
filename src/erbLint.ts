@@ -95,8 +95,8 @@ export class ERBLint {
     const task = new Task(uri, token => {
       const process = this.executeERBLint(args, {cwd: currentPath}, (error, stdout, stderr) => {
         if (token.isCanceled) return
+        if (this.reportError(error, stderr)) return
 
-        this.reportError(error, stderr)
         onDidExec && onDidExec(stdout)
         token.finished()
         onComplete && onComplete()
@@ -154,7 +154,9 @@ export class ERBLint {
   private reportError(error: cp.ExecException | null, stderr: string): boolean {
     const errorOutput = stderr.toString()
 
-    if (error && error.code === 127) {
+    if (/^no files found/.test(errorOutput)) {
+      return true
+    } else if (error && error.code === 127) {
       vscode.window.showWarningMessage(stderr)
       return true
     } else if (errorOutput.length > 0 && !this.config.suppressERBLintWarnings) {
