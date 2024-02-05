@@ -46,6 +46,26 @@ _Note: If you are using the [Rails](https://marketplace.visualstudio.com/items?i
 Declare an specific path to run `erb-lint`. This is untested and may have some issues loading your configuration file (see configFilePath to fix this).
 If no path is provided, the extension will default to running `erb-lint` with `bundle`.
 
+The extension expected the **executable** path, so instead of 
+
+```
+$ gem which erb_lint
+~/.rvm/gems/ruby-3.1.0/gems/erb_lint-0.4.0/lib/erb_lint.rb
+```
+
+use 
+
+```
+~/.rvm/gems/ruby-3.1.0/gems/erb_lint-0.4.0/exe
+```
+
+In case of a globally installed erblint, use
+
+```
+$ which erblint
+/opt/rubies/ruby-2.7.8/bin/erblint
+```
+
 ## erb.erb-lint.configFilePath
 
 Path to the `erb-lint` configuration file. The extension will try to use your root `.erb-lint.yml` file.
