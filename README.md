@@ -66,6 +66,10 @@ $ which erblint
 /opt/rubies/ruby-2.7.8/bin/erblint
 ```
 
+## erb.erb-lint.cmd
+
+Command to use when running `erb-lint`. The default is `erb_lint`, but older versions of the gem may need to use `erblint`.
+
 ## erb.erb-lint.configFilePath
 
 Path to the `erb-lint` configuration file. The extension will try to use your root `.erb-lint.yml` file.

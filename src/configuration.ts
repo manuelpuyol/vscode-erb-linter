@@ -15,8 +15,8 @@ export interface ERBLintConfig {
  * @return {ERBLintConfig} config object
  */
 export const getConfig: () => ERBLintConfig = () => {
-  const cmd = 'erblint'
   const conf = workspace.getConfiguration('erb.erb-lint')
+  const cmd = conf.get('cmd', 'erb_lint')
   const configPath = conf.get('executePath', '')
   const suppressERBLintWarnings = conf.get('suppressERBLintWarnings', true)
   const pathToBundler = conf.get('pathToBundler', 'bundle') || 'bundle'
