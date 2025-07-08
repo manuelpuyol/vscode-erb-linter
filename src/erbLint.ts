@@ -134,17 +134,13 @@ export class ERBLint {
       return null
     }
 
-    try {
-      erbLint = JSON.parse(output)
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        const regex = /[\r\n \t]/g
-        const message = output.replace(regex, ' ')
-        const errorMessage = `Error on parsing output (It might non-JSON output) : "${message}"`
-        vscode.window.showWarningMessage(errorMessage)
+    erbLint = this.parseOutput(output)
 
-        return null
-      }
+    if (!erbLint) {
+      const regex = /[\r\n \t]/g
+      const message = output.replace(regex, ' ')
+      const errorMessage = `Error on parsing output (It might non-JSON output) : "${message}"`
+      vscode.window.showWarningMessage(errorMessage)
     }
 
     return erbLint
@@ -165,5 +161,20 @@ export class ERBLint {
     }
 
     return false
+  }
+
+  private parseOutput(output: string): ERBLintOutput | null {
+    const lines = output.split('\n')
+
+    for (const line of lines) {
+      try {
+        const parsed = JSON.parse(line)
+        return parsed
+      } catch (e) {
+        // continue to next line if parsing fails
+      }
+    }
+
+    return null // return null if no valid JSON found
   }
 }
