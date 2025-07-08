@@ -8,6 +8,7 @@ export interface ERBLintConfig {
   suppressERBLintWarnings: boolean
   executePath: string
   pathToBundler: string
+  cache: boolean
 }
 
 /**
@@ -17,6 +18,7 @@ export interface ERBLintConfig {
 export const getConfig: () => ERBLintConfig = () => {
   const conf = workspace.getConfiguration('erb.erb-lint')
   const cmd = conf.get('cmd', 'erb_lint')
+  const cache = conf.get('cache', false)
   const configPath = conf.get('executePath', '')
   const suppressERBLintWarnings = conf.get('suppressERBLintWarnings', true)
   const pathToBundler = conf.get('pathToBundler', 'bundle') || 'bundle'
@@ -29,13 +31,18 @@ export const getConfig: () => ERBLintConfig = () => {
     command = `${pathToBundler} exec ${cmd}`
   }
 
+  if (cache) {
+    command = `${command} --cache`
+  }
+
   return {
     command,
     configFilePath: conf.get('configFilePath', ''),
     onSave: conf.get('onSave', true),
     suppressERBLintWarnings,
     executePath: configPath,
-    pathToBundler
+    pathToBundler,
+    cache
   }
 }
 

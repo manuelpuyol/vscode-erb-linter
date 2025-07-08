@@ -46,14 +46,14 @@ _Note: If you are using the [Rails](https://marketplace.visualstudio.com/items?i
 Declare an specific path to run `erb-lint`. This is untested and may have some issues loading your configuration file (see configFilePath to fix this).
 If no path is provided, the extension will default to running `erb-lint` with `bundle`.
 
-The extension expected the **executable** path, so instead of 
+The extension expected the **executable** path, so instead of
 
 ```
 $ gem which erb_lint
 ~/.rvm/gems/ruby-3.1.0/gems/erb_lint-0.4.0/lib/erb_lint.rb
 ```
 
-use 
+use
 
 ```
 ~/.rvm/gems/ruby-3.1.0/gems/erb_lint-0.4.0/exe
@@ -69,6 +69,10 @@ $ which erblint
 ## erb.erb-lint.cmd
 
 Command to use when running `erb-lint`. The default is `erb_lint`, but older versions of the gem may need to use `erblint`.
+
+## erb.erb-lint.cache
+
+Enables `erb-lint` `--cache` argument. Defaults to `false`.
 
 ## erb.erb-lint.configFilePath
 
